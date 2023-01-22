@@ -22,6 +22,15 @@ func main() {
 		})
 	})
 
+	r.GET("/sir", func(ctx *gin.Context) {
+		requestIP := ctx.Request.Header["X-Forwarded-For"]
+		log.Printf("/sir: request from %s\n", requestIP)
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"message": "Hello, SIR!",
+		})
+	})
+
 	httpPort := os.Getenv("HTTP_PORT")
 	if httpPort == "" {
 		log.Println("no port provided... defaulting to 5000")
