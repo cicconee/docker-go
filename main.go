@@ -28,5 +28,5 @@ func main() {
 		httpPort = "5000"
 	}
 
-	r.Run("0.0.0.0:" + httpPort)
+	r.Run(":" + httpPort)
 }
