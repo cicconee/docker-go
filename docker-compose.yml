@@ -1,3 +1,17 @@
+# version: '3.8'
+
+# services:
+#   api:
+#     build:
+#       context: .
+#     container_name: go-api
+#     hostname: go-api
+#     ports:
+#       - "3000:5000"
+#     deploy:
+#       restart_policy:
+#         condition: unless-stopped
+
 version: '3.8'
 
 services:
@@ -6,8 +20,28 @@ services:
       context: .
     container_name: go-api
     hostname: go-api
-    ports:
-      - "3000:5000"
     deploy:
       restart_policy:
         condition: unless-stopped
+    networks:
+      proxy:
+  caddy:
+    image: caddy:2-alpine
+    container_name: reverse_proxy
+    restart: unless-stopped
+    environment:
+      - SITE_ADDRESS=${SITE_ADDRESS:?SITE_ADDRESS environment variable is not set}
+    ports:
+      - "80:80"
+      - "443:443"  
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - api_caddy_data:/data # Optional
+      - api_caddy_config:/config # Optional
+    networks:
+      proxy:
+volumes:
+  api_caddy_data:
+  api_caddy_config:
+networks:
+  proxy:

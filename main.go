@@ -37,6 +37,10 @@ func main() {
 		ctx.JSON(http.StatusOK, headers)
 	})
 
+	r.GET("/a", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, "okay at /a")
+	})
+
 	httpPort := os.Getenv("HTTP_PORT")
 	if httpPort == "" {
 		log.Println("no port provided... defaulting to 5000")
